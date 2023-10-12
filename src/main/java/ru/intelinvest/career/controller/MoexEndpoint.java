@@ -18,11 +18,11 @@ package ru.intelinvest.career.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.intelinvest.career.models.Stock;
 import ru.intelinvest.career.service.MoexService;
+import ru.intelinvest.career.models.StockFilter;
+import ru.intelinvest.career.util.filter.StockFilterUtil;
 
 import java.util.List;
 
@@ -34,9 +34,9 @@ public class MoexEndpoint {
     private final MoexService moexService;
 
     @PostMapping("stocks")
-    public ResponseEntity<List<Stock>> processIntegration() {
+    public ResponseEntity<List<Stock>> processIntegration(@RequestBody StockFilter stockFilter) {
         var stocks = moexService.getStocks();
         // todo реализация задания № 2 и 3 здесь
-        return ResponseEntity.ok(stocks);
+        return ResponseEntity.ok(StockFilterUtil.filter(stocks, stockFilter));
     }
 }
