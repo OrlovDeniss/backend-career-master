@@ -1,20 +1,18 @@
 package ru.intelinvest.career.models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
 
+import static com.fasterxml.jackson.annotation.JsonFormat.Feature.ACCEPT_CASE_INSENSITIVE_PROPERTIES;
+
 @Data
+@Builder
+@JsonFormat(with = ACCEPT_CASE_INSENSITIVE_PROPERTIES)
 public class StockFilter {
-
-    @JsonProperty("LISTLEVEL")
     private List<Integer> listLevel;
-
-    @JsonProperty("SECID")
     private List<String> secId;
-
-    @JsonProperty("LOTSIZE")
     private Integer lotSize;
-
 }

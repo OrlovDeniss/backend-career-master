@@ -16,6 +16,8 @@
 
 package ru.intelinvest.career.controller;
 
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -33,8 +35,8 @@ import java.util.List;
 @RequestMapping("/moex")
 public class MoexEndpoint {
 
-    private static final String X_TOTAL_STOCKS_COUNT = "X-Total-Stock-Count";
-    private static final String X_PAGE_STOCKS_COUNT = "X-Page-Stock-Count";
+    private static final String X_TOTAL_STOCKS_COUNT = "X-Total-Stocks-Count";
+    private static final String X_PAGE_STOCKS_COUNT = "X-Page-Stocks-Count";
     private static final String FROM = "0";
     private static final String SIZE = "10";
 
@@ -42,14 +44,19 @@ public class MoexEndpoint {
 
     @PostMapping("stocks")
     public ResponseEntity<List<Stock>> processIntegration(
-            @RequestBody(required = false) StockFilter stockFilter,
-            @RequestParam(required = false, defaultValue = FROM) Integer from,
-            @RequestParam(required = false, defaultValue = SIZE) Integer size) {
+            @RequestBody StockFilter stockFilter,
+            @RequestParam(required = false, defaultValue = FROM) @PositiveOrZero Integer from,
+            @RequestParam(required = false, defaultValue = SIZE) @Positive Integer size) {
         var stocks = moexService.getStocks();
-        var stocksAfterFilter = StockFilterUtil.filter(stocks, stockFilter, from, size);
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(X_TOTAL_STOCKS_COUNT, String.valueOf(stocks.size()));
-        httpHeaders.add(X_PAGE_STOCKS_COUNT, String.valueOf(stocksAfterFilter.size()));
-        return new ResponseEntity<>(stocksAfterFilter, httpHeaders, HttpStatus.OK);
+        var filteredStocks = StockFilterUtil.filter(stocks, stockFilter, from, size);
+        var headers = buildHeaders(stocks.size(), filteredStocks.size());
+        return new ResponseEntity<>(filteredStocks, headers, HttpStatus.OK);
+    }
+
+    private HttpHeaders buildHeaders(Integer stocksSize, Integer filteredStocksSize) {
+        var headers = new HttpHeaders();
+        headers.add(X_TOTAL_STOCKS_COUNT, String.valueOf(stocksSize));
+        headers.add(X_PAGE_STOCKS_COUNT, String.valueOf(filteredStocksSize));
+        return headers;
     }
 }

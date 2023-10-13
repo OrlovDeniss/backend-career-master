@@ -4,14 +4,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Builder;
 import lombok.Data;
-import ru.intelinvest.career.util.jackson.SecuritiesDataDeserializer;
+import ru.intelinvest.career.util.jackson.StocksDataDeserializer;
 
 import java.util.List;
 
 @Data
 @Builder
-@JsonDeserialize(using = SecuritiesDataDeserializer.class)
-public class SecuritiesData {
+@JsonDeserialize(using = StocksDataDeserializer.class)
+public class StockData {
 
     @JsonProperty("charsetinfo")
     private Charset charset;

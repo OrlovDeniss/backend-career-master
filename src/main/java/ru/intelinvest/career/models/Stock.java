@@ -16,93 +16,41 @@
 
 package ru.intelinvest.career.models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Builder;
 import lombok.Data;
 
-import java.time.LocalDate;
+import static com.fasterxml.jackson.annotation.JsonFormat.Feature.ACCEPT_CASE_INSENSITIVE_PROPERTIES;
 
 @Data
+@Builder
+@JsonFormat(with = ACCEPT_CASE_INSENSITIVE_PROPERTIES)
 public class Stock {
-
-    @JsonProperty("SECID")
     private String secid;
-
-    @JsonProperty("BOARDID")
     private String boardid;
-
-    @JsonProperty("SHORTNAME")
     private String shortname;
-
-    @JsonProperty("PREVPRICE")
     private Float prevprice;
-
-    @JsonProperty("LOTSIZE")
     private Integer lotsize;
-
-    @JsonProperty("FACEVALUE")
     private Float facevalue;
-
-    @JsonProperty("STATUS")
     private String status;
-
-    @JsonProperty("BOARDNAME")
     private String boardname;
-
-    @JsonProperty("DECIMALS")
     private Integer decimals;
-
-    @JsonProperty("SECNAME")
     private String secname;
-
-    @JsonProperty("REMARKS")
     private String remarks;
-
-    @JsonProperty("MARKETCODE")
     private String marketcode;
-
-    @JsonProperty("INSTRID")
     private String instrid;
-
-    @JsonProperty("SECTORID")
     private String sectorid;
-
-    @JsonProperty("MINSTEP")
     private Float minstep;
-
-    @JsonProperty("PREVWAPRICE")
     private Float prevwaprice;
-
-    @JsonProperty("FACEUNIT")
     private String faceunit;
-
-    @JsonProperty("PREVDATE")
-    private LocalDate prevdate;
-
-    @JsonProperty("ISSUESIZE")
+    private String prevdate;
     private Long issuesize;
-
-    @JsonProperty("ISIN")
     private String isin;
-
-    @JsonProperty("LATNAME")
     private String latname;
-
-    @JsonProperty("REGNUMBER")
     private String regnumber;
-
-    @JsonProperty("PREVLEGALCLOSEPRICE")
     private Float prevlegalcloseprice;
-
-    @JsonProperty("CURRENCYID")
     private String currencyid;
-
-    @JsonProperty("SECTYPE")
     private String sectype;
-
-    @JsonProperty("LISTLEVEL")
     private Integer listlevel;
-
-    @JsonProperty("SETTLEDATE")
-    private LocalDate settledate;
-
+    private String settledate;
 }

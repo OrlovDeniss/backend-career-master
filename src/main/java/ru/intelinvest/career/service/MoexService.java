@@ -16,16 +16,19 @@
 
 package ru.intelinvest.career.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import ru.intelinvest.career.models.SecuritiesData;
 import ru.intelinvest.career.models.Stock;
+import ru.intelinvest.career.models.StockData;
+import ru.intelinvest.career.util.exception.MoexApiException;
+import ru.intelinvest.career.util.exception.MoexJsonParseException;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -36,10 +39,20 @@ public class MoexService {
     private final ObjectMapper objectMapper;
 
     public List<Stock> getStocks() {
-        String json = restTemplate.getForObject(GET_SECURITIES_URL, String.class);
-        if (json == null || json.isEmpty()) {
-            return Collections.emptyList();
+        var json = restTemplate.getForObject(GET_SECURITIES_URL, String.class);
+        if (Objects.isNull(json) || json.isBlank()) {
+            throw new MoexApiException("NULL or BLANK from " + GET_SECURITIES_URL);
         }
-        return objectMapper.convertValue(json, SecuritiesData.class).getStocks();
+        return getStockData(json).getStocks();
+    }
+
+    private StockData getStockData(String json) {
+        StockData stockData;
+        try {
+            stockData = objectMapper.readValue(json, StockData.class);
+        } catch (JsonProcessingException e) {
+            throw new MoexJsonParseException("Bad StockData json.");
+        }
+        return stockData;
     }
 }

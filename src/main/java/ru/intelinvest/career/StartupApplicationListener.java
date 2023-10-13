@@ -31,13 +31,12 @@ public class StartupApplicationListener implements ApplicationListener<Applicati
 
     private static final String ACCOUNT_ADDRESS = "0x77DDc987516abd90803b7e2A18F0F53a98438362";
 
-
     private final MoexService moexService;
     private final EthereumService ethereumService;
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
-        log.debug("Загружено акций с Московской биржи: {}", moexService.getStocks());
-        log.debug("Получен баланс Ethereum кошелька: {} Tether", ethereumService.getBalance(ACCOUNT_ADDRESS));
+        log.info("Загружено акций с Московской биржи: {}", moexService.getStocks());
+        log.info("Получен баланс Ethereum кошелька: {} Tether", ethereumService.getBalance(ACCOUNT_ADDRESS));
     }
 }
