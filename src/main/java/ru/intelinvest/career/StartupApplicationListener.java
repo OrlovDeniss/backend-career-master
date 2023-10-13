@@ -21,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
+import ru.intelinvest.career.service.EthereumService;
 import ru.intelinvest.career.service.MoexService;
 
 @Component
@@ -28,10 +29,15 @@ import ru.intelinvest.career.service.MoexService;
 @RequiredArgsConstructor
 public class StartupApplicationListener implements ApplicationListener<ApplicationReadyEvent> {
 
+    private static final String ACCOUNT_ADDRESS = "0x77DDc987516abd90803b7e2A18F0F53a98438362";
+
+
     private final MoexService moexService;
+    private final EthereumService ethereumService;
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
         log.debug("Загружено акций с Московской биржи: {}", moexService.getStocks());
+        log.debug("Получен баланс Ethereum кошелька: {} Tether", ethereumService.getBalance(ACCOUNT_ADDRESS));
     }
 }
